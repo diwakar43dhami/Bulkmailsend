@@ -1,0 +1,4 @@
+com\example\demo\BulkmailsendController.class
+com\example\demo\BulkmailsendApplication.class
+com\example\demo\User.class
+com\example\demo\MailService.class

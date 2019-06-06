@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+Test set: com.example.demo.BulkmailsendApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 13.385 s <<< FAILURE! - in com.example.demo.BulkmailsendApplicationTests
+contextLoads(com.example.demo.BulkmailsendApplicationTests)  Time elapsed: 0.002 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: java.lang.IllegalStateException: Error processing condition on org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration.taskSchedulerBuilder
+Caused by: java.lang.IllegalStateException: Failed to introspect Class [org.springframework.boot.autoconfigure.session.SessionAutoConfiguration$ServletSessionConfiguration] from ClassLoader [sun.misc.Launcher$AppClassLoader@42a57993]
+Caused by: java.lang.NoClassDefFoundError: org/springframework/security/web/authentication/RememberMeServices
+Caused by: java.lang.ClassNotFoundException: org.springframework.security.web.authentication.RememberMeServices
+
