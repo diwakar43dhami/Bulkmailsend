@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 /**
  * Created by Diwakar on 5/23/2019.
  */
-@Component
 public class User {
 
     private String userName;

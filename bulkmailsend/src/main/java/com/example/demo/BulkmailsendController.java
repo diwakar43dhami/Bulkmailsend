@@ -15,7 +15,6 @@ public class BulkmailsendController {
 
     @Autowired
     ExcellReaderService excellReaderService;
-
     @RequestMapping("send-mail-attachment")
     public String sendWithAttachment(@RequestParam("file") MultipartFile file) throws MessagingException {
         excellReaderService.readEmailFromExcel(file);

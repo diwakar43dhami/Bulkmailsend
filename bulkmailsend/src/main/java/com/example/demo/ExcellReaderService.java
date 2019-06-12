@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,21 +42,18 @@ import javax.mail.MessagingException;
 public class ExcellReaderService {
     @Autowired
     MailService mailService;
-//    public static final String SAMPLE_XLSX_FILE_PATH = "C:\\Users\\Diwakar\\Desktop\\Book8.xlsx";
 
     public List<User> readEmailFromExcel(MultipartFile file) {
         List<String> headers = new ArrayList<String>();
         Workbook workbook = null;
         try {
-            workbook = WorkbookFactory.create(new File(String.valueOf(file)));
+            workbook = WorkbookFactory.create(file.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidFormatException e) {
             e.printStackTrace();
         }
         workbook.forEach(sheet -> {
-            System.out.println("=> " + sheet.getSheetName());
-            System.out.println(sheet);
         });
         Sheet sheet = workbook.getSheetAt(0);
         List<User> users = new ArrayList<>();
@@ -62,7 +61,6 @@ public class ExcellReaderService {
             User user = new User();
             Map<String, String> userMap = new LinkedHashMap<String, String>();
             row.forEach(cell -> {
-                System.out.println(row);
                 Integer columnIndex = cell.getColumnIndex();
                 Integer rowIndex = cell.getRowIndex();
 
@@ -136,13 +134,12 @@ public class ExcellReaderService {
         Row rows = newsheet.createRow(rowNum++);
         int x = 0;
         for (Map.Entry<String, String> entry : usermap.entrySet()) {
-            System.out.println("key: " + entry.getKey() + "val: " + entry.getValue());
             Cell cell = rows.createCell(x);
             cell.setCellValue(entry.getValue());
             x++;
         }
 
-        path = "C:\\Users\\Diwakar\\Desktop\\workbook.xlsx";
+        path = "Documents.xlsx";
         try (OutputStream fileOut = new FileOutputStream(path)) {
             workbook.write(fileOut);
 
@@ -160,6 +157,7 @@ public class ExcellReaderService {
 
 
     public void excelPasswordProtection(String path, User user) {
+        Logger logger = LoggerFactory.getLogger(ExcellReaderService.class);
         POIFSFileSystem fs = new POIFSFileSystem();
         EncryptionInfo info = new EncryptionInfo(EncryptionMode.agile);
         Encryptor enc = info.getEncryptor();
@@ -184,48 +182,7 @@ public class ExcellReaderService {
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
-
-        System.out.println("File created!!");
-
-
+        logger.info("File created!!");
     }
-
-
-//    public String createUserFile(Map<String, String> usermap) {
-//        String path = null;
-//        XSSFWorkbook workbook = new XSSFWorkbook();
-//        XSSFSheet newsheet = workbook.createSheet("Details");
-//
-//        int rowNum = 0;
-//        Row headerRow = newsheet.createRow(rowNum++);
-//        Set<String> entries = usermap.keySet();
-//        int headerCellNum = 0;
-//        for (String h : entries) {
-//            Cell cell = headerRow.createCell(headerCellNum);
-//            cell.setCellValue(h);
-//            headerCellNum++;
-//        }
-//
-//        Row rows = newsheet.createRow(rowNum++);
-//        int x = 0;
-//        for (Map.Entry<String, String> entry : usermap.entrySet()) {
-//            System.out.println("key: " + entry.getKey() + "val: " + entry.getValue());
-//            Cell cell = rows.createCell(x);
-//            cell.setCellValue(entry.getValue());
-//            x++;
-//        }
-//
-//        path = "C:\\Users\\Diwakar\\Desktop\\workbook.xls";
-//        try (OutputStream fileOut = new FileOutputStream(path)) {
-//            workbook.write(fileOut);
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return path;
-//
-//    }
 
 }

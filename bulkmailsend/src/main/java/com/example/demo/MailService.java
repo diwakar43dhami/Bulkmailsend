@@ -1,4 +1,5 @@
 package com.example.demo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,6 +13,7 @@ import javax.mail.internet.MimeMessage;
  */
 @Service
 public class MailService {
+    @Autowired
     private JavaMailSender javaMailSender;
     public MailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -36,10 +38,8 @@ public class MailService {
         }else if(fName== null && lName != null ){
             helper.setText(" Hi"+ " " + lName + " " + "Please find the attached document below.");
         }
-
         FileSystemResource file = new FileSystemResource(path);
         helper.addAttachment(file.getFilename(), file);
-
         javaMailSender.send(mimeMessage);
     }
 }
